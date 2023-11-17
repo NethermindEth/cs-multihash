@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <RuntimeIdentifiers>win10-x64;osx-x64;ubuntu-x64</RuntimeIdentifiers>
+    <TargetFramework>net8.0</TargetFramework>
     <Description>Multiformat hash encoding</Description>
     <Copyright>Copyright © tabrath 2019</Copyright>
     <AssemblyTitle>Multiformats.Hash</AssemblyTitle>
