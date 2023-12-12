@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Composition;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
@@ -23,7 +23,7 @@ namespace Multiformats.Hash.Algorithms
     public class KECCAK_224 : KECCAK
     {
         public KECCAK_224()
-			: base(HashType.KECCAK_224, "keccak-224", 28, () => new KeccakDigest(224))
+            : base(HashType.KECCAK_224, "keccak-224", 28, () => new KeccakDigest(224))
         {
         }
     }
@@ -33,7 +33,7 @@ namespace Multiformats.Hash.Algorithms
     public class KECCAK_256 : KECCAK
     {
         public KECCAK_256()
-			: base(HashType.KECCAK_256, "keccak-256", 32, () => new KeccakDigest(256))
+            : base(HashType.KECCAK_256, "keccak-256", 32, () => new KeccakDigest(256))
         {
         }
     }
@@ -43,7 +43,7 @@ namespace Multiformats.Hash.Algorithms
     public class KECCAK_384 : KECCAK
     {
         public KECCAK_384()
-			: base(HashType.KECCAK_384, "keccak-384", 48, () => new KeccakDigest(384))
+            : base(HashType.KECCAK_384, "keccak-384", 48, () => new KeccakDigest(384))
         {
         }
     }
@@ -53,7 +53,7 @@ namespace Multiformats.Hash.Algorithms
     public class KECCAK_512 : KECCAK
     {
         public KECCAK_512()
-			: base(HashType.KECCAK_512, "keccak-512", 64, () => new KeccakDigest(512))
+            : base(HashType.KECCAK_512, "keccak-512", 64, () => new KeccakDigest(512))
         {
         }
     }

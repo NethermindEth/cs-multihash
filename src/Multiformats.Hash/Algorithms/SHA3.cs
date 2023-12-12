@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Composition;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
@@ -23,7 +23,7 @@ namespace Multiformats.Hash.Algorithms
     public class SHA3_224 : SHA3
     {
         public SHA3_224()
-			: base(HashType.SHA3_224, "sha3-224", 28, () => new Sha3Digest(224))
+            : base(HashType.SHA3_224, "sha3-224", 28, () => new Sha3Digest(224))
         {
         }
     }
@@ -33,7 +33,7 @@ namespace Multiformats.Hash.Algorithms
     public class SHA3_256 : SHA3
     {
         public SHA3_256()
-			: base(HashType.SHA3_256, "sha3-256", 32, () => new Sha3Digest(256))
+            : base(HashType.SHA3_256, "sha3-256", 32, () => new Sha3Digest(256))
         {
         }
     }
@@ -43,7 +43,7 @@ namespace Multiformats.Hash.Algorithms
     public class SHA3_384 : SHA3
     {
         public SHA3_384()
-			: base(HashType.SHA3_384, "sha3-384", 48, () => new Sha3Digest(384))
+            : base(HashType.SHA3_384, "sha3-384", 48, () => new Sha3Digest(384))
         {
         }
     }
@@ -53,7 +53,7 @@ namespace Multiformats.Hash.Algorithms
     public class SHA3_512 : SHA3
     {
         public SHA3_512()
-			: base(HashType.SHA3_512, "sha3-512", 64, () => new Sha3Digest(512))
+            : base(HashType.SHA3_512, "sha3-512", 64, () => new Sha3Digest(512))
         {
         }
     }

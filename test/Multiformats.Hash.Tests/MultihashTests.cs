@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,7 +34,7 @@ namespace Multiformats.Hash.Tests
         private static Multihash TestCastToMultihash(string hex, int code, string name)
         {
             var ob = Hex.Decode(hex);
-            var b = Binary.Varint.GetBytes((uint) code).Concat(Binary.Varint.GetBytes((uint) ob.Length)).Concat(ob).ToArray();
+            var b = Binary.Varint.GetBytes((uint)code).Concat(Binary.Varint.GetBytes((uint)ob.Length)).Concat(ob).ToArray();
             return Multihash.Cast(b);
         }
 
@@ -152,7 +152,7 @@ namespace Multiformats.Hash.Tests
         public void TestMultithreadedEnvironment(HashType type)
         {
             var rand = new Random(Environment.TickCount);
-            var bytes = new byte[32*1024];
+            var bytes = new byte[32 * 1024];
             rand.NextBytes(bytes);
 
             Parallel.For(0, 200, _ => Multihash.Sum(type, bytes));

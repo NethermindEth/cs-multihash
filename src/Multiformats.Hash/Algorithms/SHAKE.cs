@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Composition;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
@@ -23,7 +23,7 @@ namespace Multiformats.Hash.Algorithms
     public class SHAKE_128 : SHAKE
     {
         public SHAKE_128()
-			: base(HashType.SHAKE_128, "shake-128", 16, () => new ShakeDigest(128))
+            : base(HashType.SHAKE_128, "shake-128", 16, () => new ShakeDigest(128))
         {
         }
     }
@@ -33,7 +33,7 @@ namespace Multiformats.Hash.Algorithms
     public class SHAKE_256 : SHAKE
     {
         public SHAKE_256()
-			: base(HashType.SHAKE_256, "shake-256", 32, () => new ShakeDigest(256))
+            : base(HashType.SHAKE_256, "shake-256", 32, () => new ShakeDigest(256))
         {
         }
     }

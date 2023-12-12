@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Composition;
 using System.Linq;
 using System.Security.Cryptography;
@@ -13,7 +13,7 @@ namespace Multiformats.Hash.Algorithms
         private readonly Func<HashAlgorithm> _factory;
 
         public MURMUR3_32()
-			: base(HashType.MURMUR3_32, "murmur3-32", 4)
+            : base(HashType.MURMUR3_32, "murmur3-32", 4)
         {
             _factory = () => MurmurHash.Create32(managed: false);
         }
@@ -28,7 +28,7 @@ namespace Multiformats.Hash.Algorithms
         private readonly Func<HashAlgorithm> _factory;
 
         public MURMUR3_128()
-			: base(HashType.MURMUR3_128, "murmur3-128", 16)
+            : base(HashType.MURMUR3_128, "murmur3-128", 16)
         {
             _factory = () => MurmurHash.Create128(managed: false, preference: AlgorithmPreference.X64);
         }

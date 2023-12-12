@@ -28,7 +28,7 @@ namespace Multiformats.Hash
         protected Multihash(HashType code, byte[] digest)
         {
             Code = code;
-            Name = GetName((int) code);
+            Name = GetName((int)code);
             Digest = digest;
 
             _bytes = new Lazy<byte[]>(() => Encode(digest, code));
@@ -47,11 +47,11 @@ namespace Multiformats.Hash
 
         public override bool Equals(object obj)
         {
-            var other = (Multihash) obj;
+            var other = (Multihash)obj;
             return other != null && _bytes.Value.SequenceEqual(other._bytes.Value);
         }
 
-        public override int GetHashCode() => (int) Code ^ Length ^ Digest.Sum(b => b);
+        public override int GetHashCode() => (int)Code ^ Length ^ Digest.Sum(b => b);
 
         public bool Verify(byte[] data) => Sum(Code, data, Length).Equals(this);
         public Task<bool> VerifyAsync(byte[] data) => SumAsync(Code, data, Length).ContinueWith(mh => mh.Result?.Equals(this) ?? false);
@@ -146,7 +146,7 @@ namespace Multiformats.Hash
             return new Multihash((HashType)code, buf.Slice(offset));
         }
 
-        public static byte[] Encode(byte[] data, HashType code) => Binary.Varint.GetBytes((uint) code).Concat(Binary.Varint.GetBytes((uint)data.Length), data);
+        public static byte[] Encode(byte[] data, HashType code) => Binary.Varint.GetBytes((uint)code).Concat(Binary.Varint.GetBytes((uint)data.Length), data);
         public static Multihash Encode(string s, HashType code) => Encode(Multibase.Base32.Decode(s), code);
         public static byte[] Encode<TAlgorithm>(byte[] data) where TAlgorithm : IMultihashAlgorithm
         {

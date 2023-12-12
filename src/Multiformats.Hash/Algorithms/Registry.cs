@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Composition;
@@ -22,7 +22,7 @@ namespace Multiformats.Hash.Algorithms
             _container = new ContainerConfiguration()
                 .WithAssembly(typeof(Registry).GetTypeInfo().Assembly)
                 .CreateContainer();
-            
+
             _algorithms = _container.GetExports<ExportFactory<IMultihashAlgorithm, MultihashAlgorithmMetadata>>();
             _cache = new ConcurrentDictionary<int, Export<IMultihashAlgorithm>>();
         }
