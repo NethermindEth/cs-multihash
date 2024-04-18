@@ -1,6 +1,5 @@
 using System;
 using System.Composition;
-using System.Linq;
 using System.Security.Cryptography;
 using Murmur;
 
