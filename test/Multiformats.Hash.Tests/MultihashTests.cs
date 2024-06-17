@@ -56,7 +56,7 @@ namespace Multiformats.Hash.Tests
 
             Assert.True(Multihash.TryParse(mb, out var mh, out var encoding));
             Assert.Equal(mh.ToBytes(), hex);
-            Assert.Equal(encoding, MultibaseEncoding.Base32Lower);
+            Assert.Equal(MultibaseEncoding.Base32Lower, encoding);
         }
 
         [Fact]
@@ -96,10 +96,10 @@ namespace Multiformats.Hash.Tests
         public void TestTable(int code, string name)
         {
             if (Multihash.GetName(code) != name)
-                Assert.True(false, $"Table mismatch: {Multihash.GetName(code)}, {name}");
+                Assert.Fail($"Table mismatch: {Multihash.GetName(code)}, {name}");
 
             if ((int)Multihash.GetCode(name) != code)
-                Assert.True(false, $"Table mismatch: {Multihash.GetCode(name)}, {code}");
+                Assert.Fail($"Table mismatch: {Multihash.GetCode(name)}, {code}");
         }
 
         [Theory]
