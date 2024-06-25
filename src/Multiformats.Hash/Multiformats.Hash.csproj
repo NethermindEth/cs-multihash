@@ -3,15 +3,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <Description>Multiformat hash encoding</Description>
     <Copyright>Copyright © tabrath 2019</Copyright>
-    <AssemblyTitle>Multiformats.Hash</AssemblyTitle>
-    <VersionPrefix>1.5.0</VersionPrefix>
+    <AssemblyTitle>Nethermind.Multiformats.Hash</AssemblyTitle>
     <Authors>tabrath</Authors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyName>Multiformats.Hash</AssemblyName>
-    <PackageId>Multiformats.Hash</PackageId>
+    <AssemblyName>Nethermind.Multiformats.Hash</AssemblyName>
+    <PackageId>Nethermind.Multiformats.Hash</PackageId>
     <PackageTags>multiformats multihash sha1 sha3 keccak blake2 shake</PackageTags>
-    <PackageIconUrl>https://cdn.rawgit.com/multiformats/website/116894f6/favicon.png</PackageIconUrl>
-    <PackageLicenseUrl>https://github.com/multiformats/cs-multihash/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIcon>favicon.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/multiformats/cs-multihash</RepositoryUrl>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -19,6 +18,8 @@
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
     <NoWarn>$(NoWarn);NU1605</NoWarn>
+    <SourceRevisionId Condition="'$(Commit)' != ''">$(Commit.Substring(0, 8))</SourceRevisionId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,9 +43,9 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb;$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="BouncyCastle.Cryptography" Version="2.3.1" />
+    <PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
     <PackageReference Include="BinaryEncoding" Version="1.4.0" />
-    <PackageReference Include="Multiformats.Base" Version="2.0.1" />
+    <PackageReference Include="Nethermind.Multiformats.Base" Version="2.0.2" />
     <PackageReference Include="System.Composition" Version="1.2.0" />
     <PackageReference Include="murmurhash" Version="1.0.2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
@@ -129,5 +130,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+    <None Include="..\..\favicon.png" Pack="true" PackagePath="\"/>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\"/>
   </ItemGroup>
 </Project>
