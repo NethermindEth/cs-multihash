@@ -1,13 +1,8 @@
-# Multiformats.Hash (cs-multihash)
+# Multiformats Multihash
 
-[![](https://img.shields.io/badge/project-multiformats-blue.svg?style=flat-square)](https://github.com/multiformats/multiformats)
-[![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](https://webchat.freenode.net/?channels=%23ipfs)
-[![NuGet](https://buildstats.info/nuget/Multiformats.Hash)](https://www.nuget.org/packages/Multiformats.Hash/)
-[![](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-[![Codecov](https://img.shields.io/codecov/c/github/multiformats/cs-multihash/master.svg?style=flat-square)](https://codecov.io/gh/multiformats/cs-multihash)
-[![Libraries.io](https://img.shields.io/librariesio/github/multiformats/cs-multihash.svg?style=flat-square)](https://libraries.io/github/multiformats/cs-multihash)
+[![Nethermind.Multiformats.Hash](https://img.shields.io/nuget/v/Nethermind.Multiformats.Hash)](https://www.nuget.org/packages/Nethermind.Multiformats.Hash)
 
-> [Multihash](https://github.com/multiformats/multihash) implementation in C# .NET Standard 1.6 compliant.
+[Multibase](https://github.com/multiformats/multihash) implementation in C#.
 
 This is not a general purpose hashing library, but a library to encode/decode Multihashes which is a "container" describing what hash algorithm the digest is calculated with. The library also support calculating the digest, but that is not it's main purpose. If you're looking for a library that supports many algorithms and only want the raw digest, try BouncyCastle or the built-ins of the .net framework.
 
@@ -79,19 +74,3 @@ bool isValid = mh.Verify(bytes);
 * SKEIN256-(bits) (8-256)
 * SKEIN512-(bits) (8-512)
 * SKEIN1024-(bits) (8-1024)
-
-## Maintainers
-
-Captain: [@tabrath](https://github.com/tabrath).
-
-## Contribute
-
-Contributions welcome. Please check out [the issues](https://github.com/multiformats/cs-multihash/issues).
-
-Check out our [contributing document](https://github.com/multiformats/multiformats/blob/master/contributing.md) for more information on how we work, and about contributing in general. Please be aware that all interactions related to multiformats are subject to the IPFS [Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md).
-
-Small note: If editing the README, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
-
-## License
-
-[MIT](LICENSE) © 2017-2018 Trond Bråthen
