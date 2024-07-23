@@ -5,6 +5,7 @@
     <AssemblyName>Nethermind.Multiformats.Hash</AssemblyName>
     <OutputType>Library</OutputType>
     <NoWarn>$(NoWarn);NU1605</NoWarn>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <PropertyGroup>
