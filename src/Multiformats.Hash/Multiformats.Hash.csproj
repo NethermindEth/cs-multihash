@@ -1,57 +1,40 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Description>Multiformat hash encoding</Description>
-    <Copyright>Copyright © tabrath 2019</Copyright>
-    <AssemblyTitle>Nethermind.Multiformats.Hash</AssemblyTitle>
-    <Authors>tabrath</Authors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>Nethermind.Multiformats.Hash</AssemblyName>
-    <PackageId>Nethermind.Multiformats.Hash</PackageId>
-    <PackageTags>multiformats multihash sha1 sha3 keccak blake2 shake</PackageTags>
-    <PackageIcon>favicon.png</PackageIcon>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/multiformats/cs-multihash</RepositoryUrl>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <OutputType>Library</OutputType>
-    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-    <!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
     <NoWarn>$(NoWarn);NU1605</NoWarn>
-    <SourceRevisionId Condition="'$(Commit)' != ''">$(Commit.Substring(0, 8))</SourceRevisionId>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
+
   <PropertyGroup>
-    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
-    <EmbedUntrackedSources>false</EmbedUntrackedSources>
-    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <Authors>Nethermind, Trond Bråthen</Authors>
+    <Copyright>Demerzel Solutions Limited, Trond Bråthen</Copyright>
+    <Description>Multihash implementation in C#</Description>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
+    <PackageId>Nethermind.Multiformats.Hash</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>multibase multiformats</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/NethermindEth/cs-multihash</RepositoryUrl>
+    <SourceRevisionId Condition="'$(Commit)' != ''">$(Commit)</SourceRevisionId>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb;$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
     <PackageReference Include="BinaryEncoding" Version="1.4.0" />
-    <PackageReference Include="Nethermind.Multiformats.Base" Version="2.0.3" />
+    <PackageReference Include="Nethermind.Multiformats.Base" Version="2.0.3-preview.1" />
     <PackageReference Include="System.Composition" Version="1.2.0" />
     <PackageReference Include="murmurhash" Version="1.0.2" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+  
   <ItemGroup>
     <Compile Update="Algorithms\BLAKE2B.cs">
       <DependentUpon>BLAKE2B.tt</DependentUpon>
@@ -94,6 +77,7 @@
       <DependentUpon>HashType.tt</DependentUpon>
     </Compile>
   </ItemGroup>
+  
   <ItemGroup>
     <None Update="Algorithms\BLAKE2B.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -128,13 +112,12 @@
       <LastGenOutput>HashType.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
-    <None Include="..\..\favicon.png" Pack="true" PackagePath="\"/>
-    <None Include="..\..\LICENSE" Pack="true" PackagePath="\"/>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
