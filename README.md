@@ -22,11 +22,11 @@ This CLI tool passes the sharness tests [here](https://github.com/multiformats/m
 
 ## Install
 
-    PM> Install-Package Multiformats.Hash
+    PM> Install-Package Nethermind.Multiformats.Hash
 
 ---
 
-    dotnet add package Multiformats.Hash
+    dotnet add package Nethermind.Multiformats.Hash
 
 ## Usage
 
