@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using BinaryEncoding;
 using Multiformats.Base;
@@ -9,6 +11,7 @@ namespace Multiformats.Hash
 {
     public class Multihash
     {
+        private static readonly Dictionary<HashType, string> _names = CreateNames();
         private static readonly Registry _registry = new Registry();
 
         public HashType Code { get; }
@@ -18,11 +21,12 @@ namespace Multiformats.Hash
 
         public static HashType[] SupportedHashCodes => _registry.SupportedHashTypes;
 
-        private readonly Lazy<byte[]> _bytes;
+        private byte[] _bytes;
+        private readonly bool _encodeOnDemand;
 
         protected Multihash(byte[] bytes)
         {
-            _bytes = new Lazy<byte[]>(() => bytes);
+            _bytes = bytes;
         }
 
         protected Multihash(HashType code, byte[] digest)
@@ -30,11 +34,18 @@ namespace Multiformats.Hash
             Code = code;
             Name = GetName((int)code);
             Digest = digest;
-
-            _bytes = new Lazy<byte[]>(() => Encode(digest, code));
+            _encodeOnDemand = true;
         }
 
-        public string ToString(MultibaseEncoding encoding) => Multibase.EncodeRaw(encoding, _bytes.Value);
+        private byte[] Bytes => _bytes ?? (_encodeOnDemand ? EncodeOnce() : null);
+
+        private byte[] EncodeOnce()
+        {
+            Interlocked.CompareExchange(ref _bytes, Encode(Digest, Code), null);
+            return _bytes;
+        }
+
+        public string ToString(MultibaseEncoding encoding) => Multibase.EncodeRaw(encoding, Bytes);
         public override string ToString() => ToString(MultibaseEncoding.Base16Lower);
 
         [Obsolete("Use ToString() instead")]
@@ -43,12 +54,12 @@ namespace Multiformats.Hash
         [Obsolete("Use ToString() instead")]
         public string ToHexString() => ToString(MultibaseEncoding.Base16Lower);
 
-        public byte[] ToBytes() => _bytes.Value;
+        public byte[] ToBytes() => Bytes;
 
         public override bool Equals(object obj)
         {
             var other = (Multihash)obj;
-            return other != null && _bytes.Value.SequenceEqual(other._bytes.Value);
+            return other != null && Bytes.SequenceEqual(other.Bytes);
         }
 
         public override int GetHashCode() => (int)Code ^ Length ^ Digest.Sum(b => b);
@@ -146,7 +157,87 @@ namespace Multiformats.Hash
             return new Multihash((HashType)code, buf.Slice(offset));
         }
 
-        public static byte[] Encode(byte[] data, HashType code) => Binary.Varint.GetBytes((uint)code).Concat(Binary.Varint.GetBytes((uint)data.Length), data);
+        /// <summary>Reads the hash code and digest of a multihash without allocating; the digest matches <see cref="Decode(byte[])"/>.</summary>
+        public static bool TryDecode(ReadOnlySpan<byte> buffer, out HashType code, out ReadOnlySpan<byte> digest)
+        {
+            code = default;
+            digest = default;
+
+            if (buffer.Length < 2)
+                return false;
+
+            if (!TryReadVarint(buffer, out uint rawCode, out int codeSize))
+                return false;
+
+            if (!TryReadVarint(buffer.Slice(codeSize), out uint length, out int lengthSize))
+                return false;
+
+            int offset = codeSize + lengthSize;
+            if (length > buffer.Length - offset)
+                return false;
+
+            code = (HashType)rawCode;
+            digest = buffer.Slice(offset);
+            return true;
+        }
+
+        private static bool TryReadVarint(ReadOnlySpan<byte> buffer, out uint value, out int size)
+        {
+            value = 0;
+            for (int i = 0; i < 5 && i < buffer.Length; i++)
+            {
+                byte b = buffer[i];
+                if (i == 4 && b > 0x0F)
+                    break;
+
+                value |= (uint)(b & 0x7F) << (7 * i);
+                if (b < 0x80)
+                {
+                    size = i + 1;
+                    return true;
+                }
+            }
+
+            value = 0;
+            size = 0;
+            return false;
+        }
+
+        private static int VarintSize(uint value)
+        {
+            int size = 1;
+            while (value >= 0x80)
+            {
+                value >>= 7;
+                size++;
+            }
+
+            return size;
+        }
+
+        private static int WriteVarint(byte[] buffer, int offset, uint value)
+        {
+            while (value >= 0x80)
+            {
+                buffer[offset++] = (byte)(value | 0x80);
+                value >>= 7;
+            }
+
+            buffer[offset++] = (byte)value;
+            return offset;
+        }
+
+        private static byte[] Encode(uint code, byte[] data)
+        {
+            uint length = (uint)data.Length;
+            byte[] result = new byte[VarintSize(code) + VarintSize(length) + data.Length];
+            int offset = WriteVarint(result, 0, code);
+            offset = WriteVarint(result, offset, length);
+            Buffer.BlockCopy(data, 0, result, offset, data.Length);
+            return result;
+        }
+
+        public static byte[] Encode(byte[] data, HashType code) => Encode((uint)code, data);
         public static Multihash Encode(string s, HashType code) => Encode(Multibase.Base32.Decode(s), code);
         public static byte[] Encode<TAlgorithm>(byte[] data) where TAlgorithm : IMultihashAlgorithm
         {
@@ -154,7 +245,7 @@ namespace Multiformats.Hash
             if (!algo.HasValue)
                 throw new NotSupportedException($"{typeof(TAlgorithm)} is not supported.");
 
-            return Binary.Varint.GetBytes((uint)algo.Value).Concat(Binary.Varint.GetBytes((uint)data.Length), data);
+            return Encode((uint)algo.Value, data);
         }
 
         private static Multihash Sum(IMultihashAlgorithm algo, byte[] data, int length) => new Multihash(algo.Code, algo.ComputeHash(data, length).Slice(0, length != -1 ? length : algo.DefaultLength));
@@ -165,12 +256,22 @@ namespace Multiformats.Hash
         public static Task<Multihash> SumAsync<TAlgorithm>(byte[] data, int length = -1) where TAlgorithm : IMultihashAlgorithm => _registry.UseAsync<TAlgorithm, Multihash>(algo => SumAsync(algo, data, length));
 
         public static implicit operator Multihash(byte[] buf) => Decode(buf);
-        public static implicit operator byte[](Multihash mh) => mh._bytes.Value;
+        public static implicit operator byte[](Multihash mh) => mh.Bytes;
         public static implicit operator Multihash(string s) => Parse(s);
         public static implicit operator string(Multihash mh) => mh.ToString(MultibaseEncoding.Base16Lower);
 
-        public static string GetName(HashType code) => code.ToString().Replace("_", "-").ToLower();
-        public static string GetName(int code) => Enum.IsDefined(typeof(HashType), (HashType)code) ? GetName((HashType)code) : "unsupported";
+        private static string FormatName(HashType code) => code.ToString().Replace("_", "-").ToLower();
+
+        private static Dictionary<HashType, string> CreateNames()
+        {
+            Dictionary<HashType, string> names = new Dictionary<HashType, string>();
+            foreach (HashType code in Enum.GetValues<HashType>())
+                names[code] = FormatName(code);
+            return names;
+        }
+
+        public static string GetName(HashType code) => _names.TryGetValue(code, out string name) ? name : FormatName(code);
+        public static string GetName(int code) => _names.TryGetValue((HashType)code, out string name) ? name : "unsupported";
 
         public static HashType? GetCode(string name) => Enum.TryParse(name.Replace("-", "_"), true, out HashType result) ? result : new HashType?();
     }
